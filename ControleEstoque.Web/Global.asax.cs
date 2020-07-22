@@ -17,5 +17,27 @@ namespace ControleEstoque.Web
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
         }
+
+        void Application_Error(object sender, EventArgs e)
+        {
+            Exception ex = Server.GetLastError();
+
+            if (ex is HttpRequestValidationException)
+            {
+                Response.Clear();
+                Response.StatusCode = 200;
+                Response.ContentType = "application/json";
+                Response.Write("{\"Resultado\":\"AVISO\",\"Mensagens\":[\"Somente texto sem carateres especiais pode ser enviados.\"],\"IdSalvo\":\"\"}");
+                Response.End();
+            }
+            else if (ex is HttpAntiForgeryException)
+                {
+                Response.Clear();
+                Response.StatusCode = 200;               
+                Response.End();
+                // pode ser feito um log de verificacao dos erros de tentativas 
+            }
+        }
+
     }
 }
