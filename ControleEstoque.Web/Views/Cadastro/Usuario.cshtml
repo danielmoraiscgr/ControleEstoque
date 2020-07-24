@@ -65,8 +65,22 @@
                 </table>
             </div>
         </div>
+        <div class="row">
+            <div class="col-md-12">
+                <nav aria-label="Navegação de página exemplo">
+                    <ul class="pagination">
+
+                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+
+                    </ul>
+                </nav>
+            </div>
+        </div>
     </section>
 </div>
+
 @Html.Hidden("id_cadastro") <!-- vai ser populado quando estiver fazendo uma alteracao-->
 <div id="modal_cadastro" class="form-horizontal invisivel" role="dialog">
     <div id="msg_mensagem_aviso" class="text-danger invisivel"></div>
@@ -100,8 +114,9 @@
             <div id="msg_aviso" class="alert alert-warning invisivel"> Falta preencher os campos acima.</div>
             <div id="msg_erro" class="alert alert-danger invisible"> Ops ! Deu ruim</div>
         </div>
-    </fieldset>
+    </fieldset>   
 </div>
+
 @section Scripts{
     <script>
 
@@ -178,7 +193,7 @@
                     param = { 'id': id };
 
                 bootbox.confirm({
-                    message: "Realmente deseja excluir o grupo do produto?",
+                    message: "Realmente deseja excluir o usuário?",
                     buttons: {
                         confirm: {
                             label: 'Sim',

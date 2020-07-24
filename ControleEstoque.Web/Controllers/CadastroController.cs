@@ -10,7 +10,7 @@ namespace ControleEtoque.Web.Controllers
 {
     public class CadastroController : Controller
     {
-
+        private const int _quantMaxLinhasPorPagina = 5;
 
         #region Usuarios
 
@@ -52,7 +52,7 @@ namespace ControleEtoque.Web.Controllers
             {
                 try
                 {
-                    if (model.Senha == _senhaPadrao)
+                    if (model.Senha ==  _senhaPadrao)
                     {
                         model.Senha = "";
                     }
@@ -89,75 +89,7 @@ namespace ControleEtoque.Web.Controllers
 
         #endregion
 
-        #region Grupo de Produtos
-
-        [Authorize]
-        public ActionResult GrupoProduto()
-        {
-            return View(GrupoProdutoModel.RecuperarLista());
-        }
-
-
-        [HttpPost]
-        [Authorize]
-        [ValidateAntiForgeryToken] // contra CSRF. Depois tem que gerar o token na view @Html.AntiForgeryToken()
-                                   // Criar também uma function na tag <script>  function add_anti_forgery_token(data) ...
-                                   // passar essa função nas requisições jquery
-        public ActionResult RecuperarGrupoProduto(int id)
-        {
-            return Json(GrupoProdutoModel.RecuperarPeloId(id));
-        }
-
-        [HttpPost]
-        [Authorize]
-        [ValidateAntiForgeryToken]
-        public ActionResult SalvarGrupoProduto(GrupoProdutoModel model)
-        {
-            var resultado = "OK";
-            var mensagens = new List<string>(); // Listar os erros de validação
-            var idSalvo = string.Empty;
-
-            if (!ModelState.IsValid)  // Se nao foi bem sucedida
-            {
-                resultado = "AVISO";
-                mensagens = ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage).ToList();               
-            }
-            else
-            {
-                try
-                {
-                    var id = model.Salvar(); 
-
-                    if (id > 0)
-                    {
-                        idSalvo = id.ToString();
-                    }
-                    else
-                    {
-                        resultado = "ERRO";
-                    }
-                                      
-                }
-                catch (Exception ex)
-                {
-
-                    resultado = "ERRO";
-                }
-            }
-            return Json(new { Resultado = resultado, Mensagens = mensagens, IdSalvo = idSalvo });  // criacao de objeto anônimo.  Variavel interna comeca com letra maiscula para seguir a nomenclatura do .Net
-        }
-
-
-        [HttpPost]
-        [Authorize]
-        [ValidateAntiForgeryToken]
-        public ActionResult ExcluirGrupoProduto(int id)
-        {
-             return Json(GrupoProdutoModel.ExcluirPeloId(id));
-        }
-
-        #endregion
-
+        
         [Authorize]
         public ActionResult MarcaProduto()
         {
