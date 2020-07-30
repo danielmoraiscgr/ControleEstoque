@@ -1,65 +1,57 @@
-﻿using ControleEstoque.Web.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using System.Web.Configuration;
 using System.Web.Mvc;
+using ControleEstoque.Web.Models;
 
-namespace ControleEtoque.Web.Controllers
+namespace ControleEstoque.Web.Controllers.Cadastro
 {
-    [Authorize(Roles = "Gerente,Operador,Administrativo")]
-    public class CadGrupoProdutoController : Controller
+    public class CadUnidadeMedidaController : Controller
     {
         private const int _quantMaxLinhasPorPagina = 5;
 
-        
+        [Authorize]
         public ActionResult Index()
         {
-            ViewBag.ListaTamPag = new SelectList(new int[] { _quantMaxLinhasPorPagina, 10, 15, 20, 30}, _quantMaxLinhasPorPagina);
+            ViewBag.ListaTamPag = new SelectList(new int[] { _quantMaxLinhasPorPagina, 10, 15, 20, 30 }, _quantMaxLinhasPorPagina);
             ViewBag.QuantMaxLinhasPorPagina = 5;
             ViewBag.PaginaAtual = 1;
 
-            var lista = GrupoProdutoModel.RecuperarLista(ViewBag.PaginaAtual, _quantMaxLinhasPorPagina);
-            var quant = GrupoProdutoModel.RecuperarQuantidade(); 
-                      
-            var difQuantPaginas = (quant % ViewBag.QuantMaxLinhasPorPagina)>0 ? 1:0;            
+            var lista = UnidadeMedidaModel.RecuperarLista(ViewBag.PaginaAtual, _quantMaxLinhasPorPagina);
+            var quant = UnidadeMedidaModel.RecuperarQuantidade();
+
+            var difQuantPaginas = (quant % ViewBag.QuantMaxLinhasPorPagina) > 0 ? 1 : 0;
             ViewBag.QuantPaginas = (quant / ViewBag.QuantMaxLinhasPorPagina) + difQuantPaginas;
-            
+
             return View(lista);
         }
 
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
-        public JsonResult GrupoProdutoPagina(int pagina, int tamPag)
+        public JsonResult UnidadeMedidaPagina(int pagina, int tamPag)
         {
-            var lista = GrupoProdutoModel.RecuperarLista(pagina, tamPag);
-                      
+            var lista = UnidadeMedidaModel.RecuperarLista(pagina, tamPag);
+
 
             return Json(lista);
         }
 
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken] // contra CSRF. Depois tem que gerar o token na view @Html.AntiForgeryToken()
                                    // Criar também uma function na tag <script>  function add_anti_forgery_token(data) ...
                                    // passar essa função nas requisições jquery
-        public JsonResult RecuperarGrupoProduto(int id)
+        public JsonResult RecuperarUnidadeMedida(int id)
         {
-            return Json(GrupoProdutoModel.RecuperarPeloId(id));
-        }
-
-
-        [HttpPost]
-        [Authorize(Roles = "Gerente,Administrativo")]
-        [ValidateAntiForgeryToken]
-        public JsonResult ExcluirGrupoProduto(int id)
-        {
-             return Json(GrupoProdutoModel.ExcluirPeloId(id));
+            return Json(UnidadeMedidaModel.RecuperarPeloId(id));
         }
 
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
-        public JsonResult SalvarGrupoProduto(GrupoProdutoModel model)
+        public JsonResult SalvarUnidadeMedida(UnidadeMedidaModel model)
         {
             var resultado = "OK";
             var mensagens = new List<string>(); // Listar os erros de validação
@@ -68,13 +60,13 @@ namespace ControleEtoque.Web.Controllers
             if (!ModelState.IsValid)  // Se nao foi bem sucedida
             {
                 resultado = "AVISO";
-                mensagens = ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage).ToList();               
+                mensagens = ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage).ToList();
             }
             else
             {
                 try
                 {
-                    var id = model.Salvar(); 
+                    var id = model.Salvar();
 
                     if (id > 0)
                     {
@@ -84,7 +76,7 @@ namespace ControleEtoque.Web.Controllers
                     {
                         resultado = "ERRO";
                     }
-                                      
+
                 }
                 catch (Exception ex)
                 {
@@ -93,6 +85,15 @@ namespace ControleEtoque.Web.Controllers
                 }
             }
             return Json(new { Resultado = resultado, Mensagens = mensagens, IdSalvo = idSalvo });  // criacao de objeto anônimo.  Variavel interna comeca com letra maiscula para seguir a nomenclatura do .Net
+        }
+
+
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public JsonResult ExcluirUnidadeMedida(int id)
+        {
+            return Json(UnidadeMedidaModel.ExcluirPeloId(id));
         }
 
     }
