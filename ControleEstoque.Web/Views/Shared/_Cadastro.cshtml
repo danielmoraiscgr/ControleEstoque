@@ -1,17 +1,11 @@
 ﻿@{
     Layout = "~/Views/Shared/_Layout.cshtml";
-}
-
-@model List<ControleEstoque.Web.Models.GrupoProdutoModel>
-@{
-    ViewBag.Title = "Cadastro de Grupo de Produtos";
+    ViewBag.Title = "Cadastro de " + ViewBag.Title; 
 }
 
 @RenderSection("Styles", true)
 @RenderBody()
 
-<link href="~/Content/bootstrap-select.css" rel="stylesheet" />
-<link href="~/Content/Cadastro/GrupoProduto.css" rel="stylesheet" />
 
 <div id="cadastro">
     <section id="cadastro_cabecalho">
@@ -76,6 +70,6 @@
     </fieldset>
 </div>
 @section Scripts{
-    @RenderSection("Scripts", true)  
-    <script src="~/Scripts/Cadastro/GrupoProduto.js"></script>
+    @RenderSection("Scripts", true)
+    <script src="~/Scripts/Cadastro/CadBase.js"></script>
 }

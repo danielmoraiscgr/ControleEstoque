@@ -26,9 +26,10 @@ namespace ControleEstoque.Web.Models
 
             using (var conexao = new SqlConnection())
             {
-                var pos = (pagina-1)*tamPagina;
                 conexao.ConnectionString = ConfigurationManager.ConnectionStrings["principal"].ConnectionString;
                 conexao.Open();
+
+                var pos = (pagina-1)*tamPagina;                
 
                 using (var comando = new SqlCommand())
                 {
